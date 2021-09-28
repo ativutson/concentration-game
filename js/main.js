@@ -1,9 +1,35 @@
 class BoardSquare {
     constructor(element, color) {
         this.element = element;
+        this.element.addEventListener("click", this, false);
         this.isFaceUp = false;
         this.isMatched = false;
         this.setColor(color);
+    }
+
+    handleEvent(event) {
+        switch (event.type) {
+            case "click":
+                if (this.isFaceUp || this.isMatched) {
+                    return;
+                }
+
+                this.isFaceUp = true;
+                this.element.classList.add('flipped');
+
+                squareFlipped(this);
+        }
+    }
+
+    reset() {
+        this.isFaceUp = false;
+        this.isMatched = false;
+        this.element.classList.remove('flipped');
+    }
+    
+    matchFound() {
+        this.isFaceUp = true;
+        this.isMatched = true;
     }
     
     setColor(color) {
@@ -29,7 +55,7 @@ function generateHTMLForBoardSquares() {
         </div>`;
     }
     
-    // insert squares HTML in DOM
+    // insert squaresHTML in DOM
     const boardElement = document.getElementById('gameboard');
     boardElement.innerHTML = squaresHTML;
     console.log(boardElement)
@@ -53,7 +79,7 @@ function generateColorPairs() {
     }
 }
 //--------------------------------------------------------------------------
-// Fisher-Yates algorithm to randomly shuffles an array of elements.
+// Fisher-Yates algorithm to randomly shuffle an array of elements.
 function shuffle(array) {
     let currentIndex = array.length;
     let temporaryValue, randomIndex;
@@ -77,6 +103,54 @@ function shuffle(array) {
 function shuffleColors() {
     const colorPairs = generateColorPairs();
     return shuffle(colorPairs);
+}
+//--------------------------------------------------------------------------
+const boardSquares = [];
+
+function setupGame() {
+    generateHTMLForBoardSquares();
+
+    const randomColorPairs = shuffleColors();
+    // retrieve an array of all the .board-square elements in our DOM.
+    const squareElements = document.getElementsByClassName("board-square");
+
+    for(let i = 0; i < squareElements.length; i++) {
+        const element = squareElements[i];
+        const color = randomColorPairs[i];
+
+        const square = new BoardSquare(element, color);
+
+        boardSquares.push(square);
+    }
+}
+
+setupGame(); 
+//--------------------------------------------------------------------------
+let firstFaceupSquare = null;
+
+function squareFlipped(square) {
+    // check if the square is the first square to be flipped faceup.
+    if (firstFaceupSquare === null) {
+        firstFaceupSquare = square;
+        return;
+    }
+
+    if (firstFaceupSquare.color === square.color) {
+        firstFaceupSquare.matchFound();
+        square.matchFound();
+
+        firstFaceupSquare = null;
+    } else {
+        const a = firstFaceupSquare;
+        const b = square;
+
+        firstFaceupSquare = null;
+
+        setTimeout(function() {
+            a.reset();
+            b.reset();
+        }, 400);
+    }
 }
 
 

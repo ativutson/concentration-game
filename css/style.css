@@ -8,13 +8,14 @@
 }
 
 .board-square {
-    border: 2px solid #f7f7f7;
+    border: 2px solid #F7F7F7;
     height: 25%;
     padding: 0;
     overflow: hidden;
 }
 
 .face-container {
+    background-color: blue;
     height: 200%;
     width: 100%;
     position: absolute;
@@ -26,11 +27,13 @@
     height: 50%;
 }
   
-/* .facedown {
+.facedown {
+    background-color: #D0D0D0;
 }
 
 .faceup {
-} */
+    background-color: lightcoral;
+} 
 
 .flipped .face-container {
     top: -100%;
