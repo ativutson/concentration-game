@@ -15,7 +15,6 @@
 }
 
 .face-container {
-    background-color: blue;
     height: 200%;
     width: 100%;
     position: absolute;
@@ -31,12 +30,13 @@
     background-color: #D0D0D0;
 }
 
-.faceup {
-    background-color: lightcoral;
-} 
-
 .flipped .face-container {
     top: -100%;
+}
+
+#reset-button {
+    margin: 15px auto 0;
+    width: 370px;
 }
 
 /* colors */
