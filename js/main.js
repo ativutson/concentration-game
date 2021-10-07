@@ -35,11 +35,14 @@ class BoardSquare {
     setColor(color) {
         const faceupElement = this.element.getElementsByClassName('faceup')[0];
 
+        // remove the previous color if it exists
+        faceupElement.classList.remove(this.color);
+
         this.color = color;
         faceupElement.classList.add(color);
     }
 }
-//--------------------------------------------------------------------------
+//-------------------DOM manipulation-------------------------------------------------------
 function generateHTMLForBoardSquares() {
     const numberOfSquares = 16;
     let squaresHTML = '';
@@ -152,5 +155,31 @@ function squareFlipped(square) {
         }, 400);
     }
 }
+//--------------------------------------------------------------------------
+const resetButton = document.getElementById('reset-button');
+
+resetButton.addEventListener('click', () => {
+    resetGame();
+});
+//--------------------------------------------------------------------------
+function resetGame() {
+    firstFaceupSquare = null;
+
+    boardSquares.forEach(square => {
+        square.reset()
+    });
+
+    setTimeout(() => {
+        const randomColorPairs = shuffleColors();
+
+        for (let i = 0; i < boardSquares.length; i++) {
+            const newColor = randomColorPairs[i];
+            const square = boardSquares[i];
+
+            square.setColor(newColor);
+        }
+    }, 500);
+}
+
 
 
